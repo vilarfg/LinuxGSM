@@ -467,10 +467,15 @@ echo "Testing Branch: $TRAVIS_BRANCH"
 echo "================================="
 
 echo ""
-echo "0.1 - Create log dir's"
+echo "0.0 - Pre-test Tasks"
 echo "================================="
 echo "Description:"
 echo "Create log dir's"
+echo ""
+
+echo ""
+echo "0.1 - Create log dir's"
+echo "=================================================================="
 echo ""
 (
 	exec 5>"${TRAVIS_BUILD_DIR}/dev-debug.log"
@@ -500,7 +505,11 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
-echo "1.0 - start - no files"
+echo "1.0 - Pre-install tests"
+echo "=================================================================="
+echo ""
+
+echo "1.1 - start - no files"
 echo "================================="
 echo "Description:"
 echo "test script reaction to missing server files."
@@ -524,7 +533,7 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
-echo "1.1 - getopt"
+echo "1.2 - getopt"
 echo "================================="
 echo "Description:"
 echo "displaying options messages."
@@ -542,7 +551,7 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
-echo "1.2 - getopt with incorrect args"
+echo "1.3 - getopt with incorrect args"
 echo "================================="
 echo "Description:"
 echo "displaying options messages."
@@ -561,6 +570,10 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
+echo "2.0 - Instalation"
+echo "=================================================================="
+
+echo ""
 echo "2.0 - install"
 echo "================================="
 echo "Description:"
@@ -576,6 +589,10 @@ fn_test_result_pass
 echo "run order"
 echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
+
+echo ""
+echo "3.0 - Start/Stop/Restart Tests"
+echo "=================================================================="
 
 echo ""
 echo "3.1 - start"
@@ -711,6 +728,10 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
+echo "4.0 - Update Tests"
+echo "=================================================================="
+
+echo ""
 echo "4.1 - update"
 echo "================================="
 echo "Description:"
@@ -728,6 +749,10 @@ fn_test_result_pass
 echo "run order"
 echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
+
+echo ""
+echo "5.0 - Monitor Tests"
+echo "=================================================================="
 
 echo ""
 echo "5.1 - monitor - online"
@@ -789,7 +814,30 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
-echo "6.0 - details"
+echo "5.4 - test-alert"
+echo "================================="
+echo "Description:"
+echo "run monitor while server is offline with no lockfile."
+echo "Command: ./fctrserver test-alert"
+requiredstatus="OFFLINE"
+fn_setstatus
+(
+	exec 5>"${TRAVIS_BUILD_DIR}/dev-debug.log"
+	BASH_XTRACEFD="5"
+	set -x
+	command_test_alert.sh
+)
+fn_test_result_fail
+echo "run order"
+echo "================="
+grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
+
+echo ""
+echo "6.0 - Details Tests"
+echo "=================================================================="
+
+echo ""
+echo "6.1 - details"
 echo "================================="
 echo "Description:"
 echo "display details."
@@ -808,7 +856,7 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
-echo "6.1 - post details"
+echo "6.2 - postdetails"
 echo "================================="
 echo "Description:"
 echo "post details."
@@ -827,7 +875,11 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
-echo "7.0 - backup"
+echo "7.0 - Backup Tests"
+echo "=================================================================="
+
+echo ""
+echo "7.1 - backup"
 echo "================================="
 echo "Description:"
 echo "run a backup."
@@ -842,7 +894,11 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
-echo "8.0 - dev - detect glibc"
+echo "8.0 - Development Tools Tests"
+echo "=================================================================="
+
+echo ""
+echo "8.1 - dev - detect glibc"
 echo "================================="
 echo "Description:"
 echo "detect glibc."
@@ -861,7 +917,7 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
-echo "8.1 - dev - detect ldd"
+echo "8.2 - dev - detect ldd"
 echo "================================="
 echo "Description:"
 echo "detect ldd."
@@ -880,7 +936,7 @@ echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
 
 echo ""
-echo "8.2 - dev - detect deps"
+echo "8.3 - dev - detect deps"
 echo "================================="
 echo "Description:"
 echo "detect dependencies."
@@ -897,6 +953,26 @@ fn_test_result_pass
 echo "run order"
 echo "================="
 grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
+
+echo ""
+echo "8.4 - dev - query-raw"
+echo "================================="
+echo "Description:"
+echo "raw query output."
+echo "Command: ./fctrserver query-raw"
+requiredstatus="ONLINE"
+fn_setstatus
+(
+	exec 5>"${TRAVIS_BUILD_DIR}/dev-debug.log"
+	BASH_XTRACEFD="5"
+	set -x
+	command_dev_query_raw.sh
+)
+fn_test_result_pass
+echo "run order"
+echo "================="
+grep functionfile= "${TRAVIS_BUILD_DIR}/dev-debug.log" | sed 's/functionfile=//g'
+
 
 echo ""
 echo "================================="
